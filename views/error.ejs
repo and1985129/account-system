@@ -1,0 +1,9 @@
+<% include header.ejs %>
+  <div class="container">
+    <h3>错误页面</h3>
+    <div class="alert alert-error">
+      <strong>错误信息: </strong><%= error%>
+      <p class="text-right"><a href="/record" class="text-danger">记账</a> <a href="/logout" class="text-danger">登出</a></p>
+    </div>
+  </div>
+<% include footer.ejs %>

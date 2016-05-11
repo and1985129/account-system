@@ -1,2 +1,8 @@
-# account-system
-nodejs + mongodb
+### 个人记账系统
+
+nodejs + mongodb，尚在开发过程中。一共完成以下几步：
+
+- 完成基本界面搭建，可以在移动端使用
+- 修改界面为weui风格
+
+以上。

@@ -1,0 +1,30 @@
+<% include header.ejs%>
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="alert alert-info">
+      欢迎使用<a href="/" class="text-warning">科科香个人记账系统</a>，请登录。如果还没有用户，<a href="/reg" class="text-warning">请注册</a>。
+      <p class="text-right">by <a href="http://and1985129.github.io" class="text-danger">科科香</a>, 2016-4-28</p>
+    </div>
+
+    <% if (error) { %>
+    <div class="alert alert-danger text-center">
+      <small><%= error %></small>
+    </div>
+    <% } %>
+
+    <form method="post" role="form">
+      <div class="form-group">
+        <label for="username">用户名</label>
+        <input type="text" class="form-control" id="username" name="username">
+      </div>
+      <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" class="form-control" id="password" name="password">
+      </div>
+      <div class="form-group">
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">登入</button>
+        </div>
+      </div>
+    </form>
+  </div>
+<% include footer.ejs %>

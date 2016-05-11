@@ -1,0 +1,84 @@
+<% include header.ejs%>
+  <style type="text/css">
+    div{
+      /*border:1px solid red;*/
+    }
+    .form-group{
+      margin-bottom: 5px;
+    }
+  </style>
+  <div class="container">
+    <div class="alert alert-info">
+      <p class=" text-right">欢迎<%= user%></p>
+    </div>
+    <form method="post" action="/record" class="form-horizontal well" role="form" style="...">
+      <input type="hidden" name="_id" id="_id" value="" />
+      <div class="form-group">
+        <label for="recordDate" class="col-sm-2 control-label">日期: </label>
+        <div class="col-sm-6">
+          <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-filed="recordDate" data-link-formate="yyyy-mm-dd">
+            <input class="form-control" id="recordDate" name="recordDate" type="text" size="16" value="" readonly placeholder="记账日期">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="recordItem" class="col-sm-2 control-label">科目: </label>
+        <div class="col-sm-10">
+          <input class="form-control" id="recordItem" name="recordItem" type="text" placeholder="消费项目">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="recordAmount" class="col-sm-2 control-label">金额: </label>
+        <div class="col-sm-10">
+          <input class="form-control" id="recordAmount" name="recordAmount" type="number">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="recordComment" class="col-sm-2 control-label">备注: </label>
+        <div class="col-sm-10">
+          <input class="form-control" id="recordComment" name="recordComment" type="text">
+        </div>
+      </div>
+      <div class="form-group text-center">
+        <button type="button" class="btn btn-default" onclick="window.location.href='/logout'">退出</button>
+        <button type="button" class="btn btn-default" onclick="window.location.href='/list'">查看</button>
+        <button type="submit" class="btn btn-primary">提交</button>
+      </div>
+    </form>
+    <table class="table table-striped table-borded table-condensed" style="...">
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>科目</th>
+          <th>金额</th>
+          <th class="text-center">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%
+          records.forEach(function(record, index) {
+        %>
+        <tr>
+          <td><%= record.recordDate %></td>
+          <td><%= record.recordItem %></td>
+          <td><%= record.recordAmount %></td>
+          <td class="text-center">
+            <a href="javascript:void(0);" class="btn btn-warning btn-xs" onclick="$('#_id').val('<%=record._id%>');$('#recordAmount').val('<%=record.recordAmount%>');$('#recordDate').val('<%=record.recordDate%>');$('#recordItem').val('<%=record.recordItem%>');$('#recordComment').val('<%=record.recordComment%>');return false;">编辑</a>
+            <a href="/del/<%=record._id%>" class="btn btn-warning btn-xs" onclick="return confirm('删除后不可恢复,确定吗?');">删除</a>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <div class="alert alert-info text-right">此页面只显示最新的16条记录</div>
+    <form method="post" action="/search" class="form-inline well" role="form">
+      <label for="keyword" class="sr-only">关键字: </label>
+      <div class="form-group">
+        <input type="text" class="form-control" id="keyword" name="keyword" placeholder="请输入关键字">
+      </div>
+      <button type="submit" class="btn btn-info">搜索</button>
+    </form>
+  </div>
+<% include footer.ejs%>

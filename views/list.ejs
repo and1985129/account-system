@@ -1,0 +1,32 @@
+<% include header.ejs %>
+  <div class="container">
+    <div class="text-right">
+      <a href="/logout" class="btn btn-default">退出</a>
+      <a href="/month" class="btn btn-default">按月统计</a>
+      <a href="/stat" class="btn btn-default">分类统计</a>
+      <a href="/record" class="btn btn-default">记账</a>
+    </div>
+    <table class="table table-striped table-bordered table-condensed">
+      <caption><h3 class="text-info">记账详情</h3></caption>
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>科目</th>
+          <th>金额</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% records.forEach(function(record, index) {
+        %>
+          <tr>
+            <td><%= record.recordDate %></td>
+            <td><%= record.recordItem %></td>
+            <td><%= record.recordAmount %></td>
+            <td><%= record.recordComment %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% include footer.ejs %>
