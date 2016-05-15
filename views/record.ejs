@@ -7,6 +7,11 @@
       margin-bottom: 5px;
     }
   </style>
+  <% if (success) { %>
+  <div class="alert alert-success text-center">
+    <small><%= success %></small>
+  </div>
+  <% } %>
   <div class="container">
     <div class="alert alert-info">
       <p class=" text-right">欢迎<%= user%></p>
@@ -16,9 +21,9 @@
       <div class="form-group">
         <label for="recordDate" class="col-sm-2 control-label">日期: </label>
         <div class="col-sm-6">
-          <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-filed="recordDate" data-link-formate="yyyy-mm-dd">
-            <input class="form-control" id="recordDate" name="recordDate" type="text" size="16" value="" readonly placeholder="记账日期">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+          <div class="input-group form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-filed="recordDate" data-link-formate="yyyy-mm-dd">
+            <input class="form-control" id="recordDate" name="recordDate" type="text" size="16" value="" readonly>
+            <!--<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>-->
             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
           </div>
         </div>
@@ -32,7 +37,7 @@
       <div class="form-group">
         <label for="recordAmount" class="col-sm-2 control-label">金额: </label>
         <div class="col-sm-10">
-          <input class="form-control" id="recordAmount" name="recordAmount" type="number">
+          <input class="form-control" id="recordAmount" name="recordAmount" type="text">
         </div>
       </div>
       <div class="form-group">
@@ -61,7 +66,7 @@
           records.forEach(function(record, index) {
         %>
         <tr>
-          <td><%= record.recordDate %></td>
+          <td><%= record.displayDate %></td>
           <td><%= record.recordItem %></td>
           <td><%= record.recordAmount %></td>
           <td class="text-center">

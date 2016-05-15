@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var crypto = require('crypto');
 var User = require('../modules/user');
-
+var Record = require('../modules/record');
 /*
  * GET home page.
  */
@@ -26,12 +26,16 @@ router.get('/login', function(req, res, next) {
 router.get('/record', function(req, res, next) {
   var username = req.session.user.name;
 
-  var records = [];
-
-  res.render('record', {
-    title: '记账',
-    user: username,
-    records: records
+  Record.query(username, null, function(err, records) {
+    if (err) {
+      records = [];
+    }
+    res.render('record', {
+      title: '记账',
+      user: username,
+      records: records,
+      success: req.flash('success-info').toString()
+    });
   });
 });
 
@@ -161,7 +165,17 @@ router.post('/reg', function(req, res, next) {
 router.post('/record', checkLogin);
 
 router.post('/record', function(req, res) {
-
+  var currentUser = req.session.user;
+  var record = new Record(req.body);
+  record.username = currentUser.name;
+  record.save(function(err) {
+    if (err) {
+      console.log('error: ' + err);
+    } else {
+      req.flash('success-info', '保存成功');
+      res.redirect('record');
+    }
+  })
 });
 
 function checkLogin(req, res, next) {

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var settings = require('../settings');
 var recordSchema = new Schema({
-  _id: ObjectId,          // ID
+  //_id: ObjectId,          // ID
   username: String,           // 用户
   recordDate: Date,       // 记账日期
   recordType: String,     // 类型: 支出, 收入
@@ -14,8 +14,10 @@ var recordSchema = new Schema({
 var RecordModel = mongoose.model('record', recordSchema);
 
 var Record = function (record) {
-  this._id = record._id;
-  this.username = record.username;
+  if (record._id != "") {
+    this._id = record._id;
+  }
+
   this.recordType = record.recordType;
   this.recordItem = record.recordItem;
   this.recordAmount = record.recordAmount;
@@ -43,7 +45,6 @@ Record.prototype.save = function(callback) {
     if (err) {
       return callback(err);
     }
-
     if (record._id == null) {
       // 插入新纪录
       delete record._id;
@@ -53,7 +54,10 @@ Record.prototype.save = function(callback) {
       });
     } else {
       // 更新记录
-      RecordModel.findOneAndUpdate({_id: this._id}, record, function(err) {
+      console.log('Updating...' + record._id);
+      RecordModel.findOneAndUpdate({_id: record._id}, record, function(err) {
+        console.log('Amount: ' + record.recordAmount + '_id: ' + record._id);
+        closeConnect();
         return callback(err, record);
       })
     }
@@ -61,18 +65,40 @@ Record.prototype.save = function(callback) {
 };
 
 Record.query = function(username, options, callback) {
-  //mongoose.connect("mongodb://localhost/account-system", function(err) {
-  //  if (err) {
-  //    return callback(err);
-  //  }
-  //
-  //
-  //});
+  mongoose.connect("mongodb://localhost/account-system", function(err) {
+    if (err) {
+      return callback(err);
+    }
+
+    var query = {};
+    if (options) {
+      var regx = new RegExp(options.keyword);
+
+    } else {
+      query.username = username;
+    }
+
+    RecordModel.find(query).sort({recordDate: -1}).limit(16).exec(function(err, docs) {
+      closeConnect();
+      if (err) {
+        return callback(err, null);
+      }
+
+      var records = [];
+      docs.forEach(function(doc) {
+        var record = new Record(doc);
+        // 得到日期和时间
+        record.displayDate = record.recordDate.getFullYear() + '-' + record.recordDate.getMonth() + '-' + record.recordDate.getDay();
+        records.push(record);
+      });
+      callback(null, records);
+    });
+  });
 };
 
 function closeConnect() {
   mongoose.connection.close();
-  console.log('Close mongodb connect');
+  console.log('Close mongodb');
 };
 
 module.exports = Record;
